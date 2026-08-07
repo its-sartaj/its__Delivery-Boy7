@@ -1407,6 +1407,18 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFooter();
   initRouter();
   initDarkMode();
+// --- USER DATA ---
+const DEFAULT_USERS = [
+  { id: 1, name: 'Aarav Sharma', email: 'aarav@example.com', phone: '9876543210', role: 'Admin' },
+  { id: 2, name: 'Priya Patel', email: 'priya@example.com', phone: '9876543211', role: 'User' },
+  { id: 3, name: 'Rohan Gupta', email: 'rohan@example.com', phone: '9876543212', role: 'User' }
+];
+let USERS = JSON.parse(localStorage.getItem('mishoUsers')) || DEFAULT_USERS;
+
+function saveUsers() {
+  localStorage.setItem('mishoUsers', JSON.stringify(USERS));
+}
+
 // --- ADMIN PANEL LOGIC ---
 function renderAdminPage(subroute = 'dashboard') {
   const mainContent = document.getElementById('main-content');
@@ -1418,6 +1430,7 @@ function renderAdminPage(subroute = 'dashboard') {
         <nav>
           <a href="#/admin/dashboard" class="${subroute === 'dashboard' || !subroute ? 'active' : ''}">📊 Dashboard</a>
           <a href="#/admin/products" class="${subroute === 'products' ? 'active' : ''}">🛍️ Products</a>
+          <a href="#/admin/users" class="${subroute === 'users' ? 'active' : ''}">👥 Users</a>
           <a href="#/admin/orders" class="${subroute === 'orders' ? 'active' : ''}">📦 Orders</a>
         </nav>
       </aside>
@@ -1427,6 +1440,7 @@ function renderAdminPage(subroute = 'dashboard') {
   `;
 
   if (subroute === 'products') renderAdminProducts();
+  else if (subroute === 'users') renderAdminUsers();
   else if (subroute === 'orders') renderAdminOrders();
   else renderAdminDashboard();
 }
@@ -1633,6 +1647,145 @@ window.deleteAdminProduct = function(id) {
     saveProducts();
     renderAdminProducts();
     showToast('Product deleted!');
+  }
+}
+
+function renderAdminUsers() {
+  const adminContent = document.getElementById('admin-content-area');
+  
+  adminContent.innerHTML = `
+    <div class="admin-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h1>Manage Users</h1>
+      <button class="btn btn-primary" onclick="openAdminUserModal()">+ Add New User</button>
+    </div>
+    <div class="admin-table-container">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${USERS.map(u => `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.name}</td>
+              <td>${u.email}</td>
+              <td>${u.phone}</td>
+              <td><span class="status ${u.role.toLowerCase()}">${u.role}</span></td>
+              <td>
+                <button class="btn-sm btn-secondary" onclick="openAdminUserModal(${u.id})">Edit</button>
+                <button class="btn-sm" style="background:#ff4d4f; color:white; border:none;" onclick="deleteAdminUser(${u.id})">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- User Modal -->
+    <div id="admin-user-modal" class="modal-overlay" style="display:none; z-index:2000;">
+      <div class="modal-content admin-modal" style="max-width:500px;">
+        <span class="close-modal" onclick="closeAdminUserModal()">&times;</span>
+        <h2 id="modal-user-title" style="margin-bottom:20px;">Add User</h2>
+        <form id="admin-user-form" onsubmit="saveAdminUser(event)">
+          <input type="hidden" id="admin-u-id">
+          
+          <div class="form-group">
+            <label style="display:block; margin-bottom:5px;">Full Name</label>
+            <input type="text" id="admin-u-name" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-bottom:15px;">
+          </div>
+          
+          <div class="form-group">
+            <label style="display:block; margin-bottom:5px;">Email</label>
+            <input type="email" id="admin-u-email" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-bottom:15px;">
+          </div>
+          
+          <div class="form-group">
+            <label style="display:block; margin-bottom:5px;">Phone</label>
+            <input type="tel" id="admin-u-phone" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-bottom:15px;">
+          </div>
+          
+          <div class="form-group" style="margin-bottom:20px;">
+            <label style="display:block; margin-bottom:5px;">Role</label>
+            <select id="admin-u-role" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;">
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width:100%;">Save User</button>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+window.openAdminUserModal = function(id = null) {
+  const modal = document.getElementById('admin-user-modal');
+  const form = document.getElementById('admin-user-form');
+  
+  if (id) {
+    const user = USERS.find(u => u.id === id);
+    document.getElementById('modal-user-title').innerText = 'Edit User';
+    document.getElementById('admin-u-id').value = user.id;
+    document.getElementById('admin-u-name').value = user.name;
+    document.getElementById('admin-u-email').value = user.email;
+    document.getElementById('admin-u-phone').value = user.phone;
+    document.getElementById('admin-u-role').value = user.role;
+  } else {
+    document.getElementById('modal-user-title').innerText = 'Add New User';
+    form.reset();
+    document.getElementById('admin-u-id').value = '';
+  }
+  
+  modal.style.display = 'flex';
+}
+
+window.closeAdminUserModal = function() {
+  document.getElementById('admin-user-modal').style.display = 'none';
+}
+
+window.saveAdminUser = function(e) {
+  e.preventDefault();
+  
+  const idStr = document.getElementById('admin-u-id').value;
+  const name = document.getElementById('admin-u-name').value;
+  const email = document.getElementById('admin-u-email').value;
+  const phone = document.getElementById('admin-u-phone').value;
+  const role = document.getElementById('admin-u-role').value;
+  
+  if (idStr) {
+    const id = parseInt(idStr);
+    const idx = USERS.findIndex(u => u.id === id);
+    if (idx !== -1) {
+      USERS[idx] = { ...USERS[idx], name, email, phone, role };
+    }
+  } else {
+    const newId = USERS.length > 0 ? Math.max(...USERS.map(u => u.id)) + 1 : 1;
+    USERS.unshift({
+      id: newId,
+      name, email, phone, role
+    });
+  }
+  
+  saveUsers();
+  closeAdminUserModal();
+  renderAdminUsers();
+  showToast('User saved successfully!');
+}
+
+window.deleteAdminUser = function(id) {
+  if (confirm('Are you sure you want to delete this user?')) {
+    USERS = USERS.filter(u => u.id !== id);
+    saveUsers();
+    renderAdminUsers();
+    showToast('User deleted!');
   }
 }
 
