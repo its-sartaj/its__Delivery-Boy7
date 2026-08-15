@@ -411,22 +411,13 @@ class SongDoublyLinkedList {
     }
   };
 
-  let isSkippingManual = false;
   let lastSwitchTime = 0;
   let songStartTime = 0;
-  let lastErrorSkipTime = 0;
-
-  let watchdogTimer = null;
 
   window.onPlayerStateChange = function(event) {
     if (event.data == YT.PlayerState.PLAYING) {
       isPlaying = true;
-      isSkippingManual = false;
       songStartTime = Date.now(); // Record when song actually started playing
-      if (watchdogTimer) {
-        clearTimeout(watchdogTimer);
-        watchdogTimer = null;
-      }
       updatePlayPauseUI();
       startProgressBar();
       enableMobileBackgroundAudio();
@@ -447,30 +438,23 @@ class SongDoublyLinkedList {
       
       const playedSeconds = songStartTime > 0 ? (Date.now() - songStartTime) / 1000 : 0;
       
-      if (!isSkippingManual && playedSeconds > 10) {
+      // Only auto-play next song if current song genuinely played to the end (> 15 seconds)
+      if (playedSeconds > 15) {
         if (isRepeating) {
           player.seekTo(0);
           player.playVideo();
         } else {
-          playNext(true);
+          playNext();
         }
       } else {
-        console.log(`Ignored premature ENDED event (played only ${playedSeconds.toFixed(1)}s)`);
+        console.log(`Ignored premature ENDED event (${playedSeconds.toFixed(1)}s)`);
       }
     }
   };
 
-  let errorSkipTimer = null;
-
   window.onPlayerError = function(event) {
     console.warn('YouTube Player Error code:', event.data);
-    isSkippingManual = false;
-
-    if (errorSkipTimer) clearTimeout(errorSkipTimer);
-    errorSkipTimer = setTimeout(() => {
-      console.log('Skipping unplayable track safely...');
-      playNext(true);
-    }, 600);
+    // Do NOT auto-skip immediately on error — let user press Next or retry cleanly
   };
 
   // === PLAYER FUNCTIONS ===
@@ -481,11 +465,6 @@ class SongDoublyLinkedList {
     currentSongIndex = index;
     songStartTime = 0; // Reset song play start timer
     songList.setCurrentByIndex(index); // Sync Doubly Linked List active pointer
-
-    if (watchdogTimer) {
-      clearTimeout(watchdogTimer);
-      watchdogTimer = null;
-    }
 
     // Instant UI Update (0ms latency feedback)
     document.getElementById('song-title').textContent = song.title;
@@ -505,22 +484,8 @@ class SongDoublyLinkedList {
         } catch(e) {
           player.loadVideoById(song.youtubeId);
         }
-        try {
-          if (typeof player.playVideo === 'function') {
-            player.playVideo();
-          }
-        } catch(e) {}
-
         isPlaying = true;
         updatePlayPauseUI();
-
-        // Watchdog: If track is blocked/restricted and doesn't start, advance automatically
-        watchdogTimer = setTimeout(() => {
-          if (isPlaying && songStartTime === 0) {
-            console.warn('Playback stalled, auto-skipping to next track...');
-            playNext(true);
-          }
-        }, 4000);
       } else {
         try {
           player.cueVideoById({ videoId: song.youtubeId });
@@ -573,19 +538,15 @@ class SongDoublyLinkedList {
     }
   }
 
-  function playNext(isAutoError = false) {
+  function playNext() {
     if (playlist.length === 0) return;
     
+    // STRICT DEBOUNCE: Block ANY track change within 1000ms
     const now = Date.now();
-    if (!isAutoError && (now - lastSwitchTime < 600)) {
+    if (now - lastSwitchTime < 1000) {
       return;
     }
     lastSwitchTime = now;
-
-    if (!isAutoError) {
-      isSkippingManual = true;
-      setTimeout(() => { isSkippingManual = false; }, 2000);
-    }
 
     let nextIndex;
     if (isShuffled) {
@@ -603,22 +564,14 @@ class SongDoublyLinkedList {
   function playPrev() {
     if (playlist.length === 0) return;
 
+    // STRICT DEBOUNCE: Block ANY track change within 1000ms
     const now = Date.now();
-    if (now - lastSwitchTime < 600) {
+    if (now - lastSwitchTime < 1000) {
       return;
     }
     lastSwitchTime = now;
 
-    isSkippingManual = true;
-    setTimeout(() => { isSkippingManual = false; }, 2000);
-
     let prevIndex;
-    
-    if (player && typeof player.getCurrentTime === 'function' && player.getCurrentTime() > 3) {
-      player.seekTo(0);
-      return;
-    }
-
     if (isShuffled) {
       const currentShuffleIdx = shuffledIndices.indexOf(currentSongIndex);
       prevIndex = shuffledIndices[(currentShuffleIdx - 1 + shuffledIndices.length) % shuffledIndices.length];
