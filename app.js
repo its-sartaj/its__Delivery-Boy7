@@ -486,22 +486,17 @@ class SongDoublyLinkedList {
     if (player && typeof player.loadVideoById === 'function') {
       if (play) {
         try {
-          player.loadVideoById({ videoId: song.youtubeId });
-        } catch(e) {
           player.loadVideoById(song.youtubeId);
+        } catch(e) {
+          try { player.loadVideoById({ videoId: song.youtubeId }); } catch(err) {}
         }
-        try {
-          if (typeof player.playVideo === 'function') {
-            player.playVideo();
-          }
-        } catch(e) {}
         isPlaying = true;
         updatePlayPauseUI();
       } else {
         try {
-          player.cueVideoById({ videoId: song.youtubeId });
-        } catch(e) {
           player.cueVideoById(song.youtubeId);
+        } catch(e) {
+          try { player.cueVideoById({ videoId: song.youtubeId }); } catch(err) {}
         }
       }
     }
@@ -509,26 +504,21 @@ class SongDoublyLinkedList {
 
   function togglePlayPause() {
     enableMobileBackgroundAudio();
-    if (!player || typeof player.playVideo !== 'function') {
+    if (!player) {
       console.warn('Player not initialized yet');
       return;
     }
     
     try {
       const state = typeof player.getPlayerState === 'function' ? player.getPlayerState() : -1;
-      if (state == YT.PlayerState.PLAYING) {
+      if (state === YT.PlayerState.PLAYING) {
         player.pauseVideo();
+      } else if (state === YT.PlayerState.PAUSED) {
+        player.playVideo();
       } else {
         const song = playlist[currentSongIndex];
-        if (song) {
-          try {
-            player.loadVideoById({ videoId: song.youtubeId });
-          } catch(e) {
-            player.loadVideoById(song.youtubeId);
-          }
-          try {
-            player.playVideo();
-          } catch(e) {}
+        if (song && typeof player.loadVideoById === 'function') {
+          player.loadVideoById(song.youtubeId);
         }
       }
     } catch(err) {
