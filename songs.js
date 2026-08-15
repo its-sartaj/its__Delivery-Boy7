@@ -6,7 +6,7 @@
 const SONGS = [
   // 90s Classics (30+ songs)
   { id: 1, title: 'Tujhe Dekha Toh Yeh Jaana Sanam', artist: 'Kumar Sanu, Lata Mangeshkar', movie: 'DDLJ', year: 1995, youtubeId: 'cNV5hLSa9H8' },
-  { id: 2, title: 'Pehla Nasha', artist: 'Udit Narayan', movie: 'Jo Jeeta Wohi Sikandar', year: 1992, youtubeId: '8p1oDqQJ7YI' },
+  { id: 2, title: 'Pehla Nasha', artist: 'Udit Narayan', movie: 'Jo Jeeta Wohi Sikandar', year: 1992, youtubeId: 'Ww2U_rGvT3w' },
   { id: 3, title: 'Chaiyya Chaiyya', artist: 'Sukhwinder Singh', movie: 'Dil Se', year: 1998, youtubeId: 'PQmrmVs10X8' },
   { id: 4, title: 'Kuch Kuch Hota Hai', artist: 'Udit Narayan, Alka Yagnik', movie: 'KKHH', year: 1998, youtubeId: '0KGx1hxqcwE' },
   { id: 5, title: 'Ek Ladki Ko Dekha', artist: 'Kumar Sanu', movie: '1942: A Love Story', year: 1994, youtubeId: 'E2wz5eM9vBE' },

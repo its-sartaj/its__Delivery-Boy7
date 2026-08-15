@@ -452,9 +452,15 @@ class SongDoublyLinkedList {
     }
   };
 
+  let errorTimer = null;
+
   window.onPlayerError = function(event) {
     console.warn('YouTube Player Error code:', event.data);
-    // Do NOT auto-skip immediately on error — let user press Next or retry cleanly
+    if (errorTimer) clearTimeout(errorTimer);
+    errorTimer = setTimeout(() => {
+      console.log('Skipping unplayable/restricted track to next song...');
+      playNext(true);
+    }, 500);
   };
 
   // === PLAYER FUNCTIONS ===
@@ -484,6 +490,11 @@ class SongDoublyLinkedList {
         } catch(e) {
           player.loadVideoById(song.youtubeId);
         }
+        try {
+          if (typeof player.playVideo === 'function') {
+            player.playVideo();
+          }
+        } catch(e) {}
         isPlaying = true;
         updatePlayPauseUI();
       } else {
@@ -515,6 +526,9 @@ class SongDoublyLinkedList {
           } catch(e) {
             player.loadVideoById(song.youtubeId);
           }
+          try {
+            player.playVideo();
+          } catch(e) {}
         }
       }
     } catch(err) {
@@ -538,12 +552,11 @@ class SongDoublyLinkedList {
     }
   }
 
-  function playNext() {
+  function playNext(isErrorSkip = false) {
     if (playlist.length === 0) return;
     
-    // STRICT DEBOUNCE: Block ANY track change within 1000ms
     const now = Date.now();
-    if (now - lastSwitchTime < 1000) {
+    if (!isErrorSkip && (now - lastSwitchTime < 600)) {
       return;
     }
     lastSwitchTime = now;
