@@ -111,6 +111,7 @@ window.onYouTubeIframeAPIReady = function() {
   player = new YT.Player('youtube-player', {
     height: '200', 
     width: '200',
+    host: 'https://www.youtube-nocookie.com',
     playerVars: { 
       autoplay: 0, 
       controls: 0, 
