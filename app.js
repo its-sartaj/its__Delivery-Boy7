@@ -416,11 +416,17 @@ class SongDoublyLinkedList {
   let songStartTime = 0;
   let lastErrorSkipTime = 0;
 
+  let watchdogTimer = null;
+
   window.onPlayerStateChange = function(event) {
     if (event.data == YT.PlayerState.PLAYING) {
       isPlaying = true;
       isSkippingManual = false;
       songStartTime = Date.now(); // Record when song actually started playing
+      if (watchdogTimer) {
+        clearTimeout(watchdogTimer);
+        watchdogTimer = null;
+      }
       updatePlayPauseUI();
       startProgressBar();
       enableMobileBackgroundAudio();
@@ -439,11 +445,9 @@ class SongDoublyLinkedList {
       updatePlayPauseUI();
       stopProgressBar();
       
-      // CRITICAL FIX: Only auto-play next if the song actually played for > 15 seconds
-      // This permanently stops false ENDED triggers during track loading/buffering!
       const playedSeconds = songStartTime > 0 ? (Date.now() - songStartTime) / 1000 : 0;
       
-      if (!isSkippingManual && playedSeconds > 15) {
+      if (!isSkippingManual && playedSeconds > 10) {
         if (isRepeating) {
           player.seekTo(0);
           player.playVideo();
@@ -456,24 +460,17 @@ class SongDoublyLinkedList {
     }
   };
 
+  let errorSkipTimer = null;
+
   window.onPlayerError = function(event) {
     console.warn('YouTube Player Error code:', event.data);
-    
-    // Ignore error event if user is manually skipping songs
-    if (isSkippingManual) return;
+    isSkippingManual = false;
 
-    const now = Date.now();
-    // Allow at most ONE auto-skip per 5 seconds to prevent cascading skips
-    if (now - lastErrorSkipTime < 5000) {
-      console.warn('Blocked rapid error cascade skip');
-      return;
-    }
-    lastErrorSkipTime = now;
-
-    setTimeout(() => {
+    if (errorSkipTimer) clearTimeout(errorSkipTimer);
+    errorSkipTimer = setTimeout(() => {
       console.log('Skipping unplayable track safely...');
       playNext(true);
-    }, 800);
+    }, 600);
   };
 
   // === PLAYER FUNCTIONS ===
@@ -484,6 +481,11 @@ class SongDoublyLinkedList {
     currentSongIndex = index;
     songStartTime = 0; // Reset song play start timer
     songList.setCurrentByIndex(index); // Sync Doubly Linked List active pointer
+
+    if (watchdogTimer) {
+      clearTimeout(watchdogTimer);
+      watchdogTimer = null;
+    }
 
     // Instant UI Update (0ms latency feedback)
     document.getElementById('song-title').textContent = song.title;
@@ -500,17 +502,25 @@ class SongDoublyLinkedList {
       if (play) {
         try {
           player.loadVideoById({ videoId: song.youtubeId });
-          if (typeof player.playVideo === 'function') {
-            player.playVideo();
-          }
         } catch(e) {
           player.loadVideoById(song.youtubeId);
+        }
+        try {
           if (typeof player.playVideo === 'function') {
             player.playVideo();
           }
-        }
+        } catch(e) {}
+
         isPlaying = true;
         updatePlayPauseUI();
+
+        // Watchdog: If track is blocked/restricted and doesn't start, advance automatically
+        watchdogTimer = setTimeout(() => {
+          if (isPlaying && songStartTime === 0) {
+            console.warn('Playback stalled, auto-skipping to next track...');
+            playNext(true);
+          }
+        }, 4000);
       } else {
         try {
           player.cueVideoById({ videoId: song.youtubeId });
