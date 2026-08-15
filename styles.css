@@ -615,12 +615,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .youtube-container {
   position: absolute;
-  top: -9999px;
-  left: -9999px;
-  width: 200px;
-  height: 200px;
+  bottom: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
   opacity: 0.01;
   pointer-events: none;
+  z-index: 1;
 }
 
 .player-container {

@@ -501,8 +501,14 @@ class SongDoublyLinkedList {
       if (play) {
         try {
           player.loadVideoById({ videoId: song.youtubeId });
+          if (typeof player.playVideo === 'function') {
+            player.playVideo();
+          }
         } catch(e) {
           player.loadVideoById(song.youtubeId);
+          if (typeof player.playVideo === 'function') {
+            player.playVideo();
+          }
         }
         isPlaying = true;
         updatePlayPauseUI();
