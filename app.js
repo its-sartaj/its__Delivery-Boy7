@@ -1052,26 +1052,9 @@ class SongDoublyLinkedList {
   }
 
   function animateValue(obj, start, end, duration, isFloat=false, prefix='') {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      
-      let currentVal;
-      if (isFloat) {
-        currentVal = (parseFloat(start) + progress * (parseFloat(end) - parseFloat(start))).toFixed(1);
-      } else {
-        currentVal = Math.floor(start + progress * (end - start));
-      }
-      
-      obj.innerHTML = prefix + currentVal;
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        obj.innerHTML = prefix + end;
-      }
-    };
-    window.requestAnimationFrame(step);
+    if (obj) {
+      obj.innerHTML = prefix + end;
+    }
   }
 
   // === KEYBOARD SHORTCUTS ===
