@@ -1334,18 +1334,18 @@ kbd {
 .footer-credit { font-size: 0.85rem; color: var(--text-secondary); opacity: 0.7; }
 
 /* ==========================================================================
-   ANIMATIONS
+   ANIMATIONS (GPU ACCELERATED)
    ========================================================================== */
 @keyframes roadMove {
-  0% { background-position: 0 0; }
-  100% { background-position: -200px 0; } /* Horizontal movement */
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-60px, 0, 0); }
 }
 
 @keyframes streetlightPass {
-  0% { transform: translateX(100vw); opacity: 0; }
+  0% { transform: translate3d(100vw, 0, 0); opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% { transform: translateX(-100vw); opacity: 0; }
+  100% { transform: translate3d(-100vw, 0, 0); opacity: 0; }
 }
 
 @keyframes twinkle {
@@ -1354,14 +1354,14 @@ kbd {
 }
 
 @keyframes vehiclePass {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100vw); }
+  0% { transform: translate3d(-100px, 0, 0); }
+  100% { transform: translate3d(105vw, 0, 0); }
 }
 
 @keyframes bikeSway {
-  0%, 100% { transform: translateX(0) rotate(0deg); }
-  25% { transform: translateX(-2px) rotate(-0.3deg); }
-  75% { transform: translateX(2px) rotate(0.3deg); }
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(-2px, 0, 0) rotate(-0.3deg); }
+  75% { transform: translate3d(2px, 0, 0) rotate(0.3deg); }
 }
 
 @keyframes discSpin {
@@ -1370,13 +1370,13 @@ kbd {
 }
 
 @keyframes rainFall {
-  0% { transform: translateY(-100vh) translateX(0); opacity: 0.7; }
-  100% { transform: translateY(100vh) translateX(-20px); opacity: 0; }
+  0% { transform: translate3d(0, -100vh, 0); opacity: 0.7; }
+  100% { transform: translate3d(-20px, 100vh, 0); opacity: 0; }
 }
 
 @keyframes steamRise {
-  0% { transform: translateY(0) scale(1); opacity: 0.8; }
-  100% { transform: translateY(-40px) scale(1.5); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate3d(0, -40px, 0) scale(1.5); opacity: 0; }
 }
 
 @keyframes hornPulse {
