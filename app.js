@@ -111,7 +111,6 @@ window.onYouTubeIframeAPIReady = function() {
   player = new YT.Player('youtube-player', {
     height: '200', 
     width: '200',
-    host: 'https://www.youtube-nocookie.com',
     playerVars: { 
       autoplay: 0, 
       controls: 0, 
@@ -120,8 +119,7 @@ window.onYouTubeIframeAPIReady = function() {
       modestbranding: 1,
       rel: 0,
       enablejsapi: 1,
-      playsinline: 1,
-      origin: window.location.origin
+      playsinline: 1
     },
     events: { 
       onReady: function(event) {
@@ -207,16 +205,16 @@ class SongDoublyLinkedList {
   setCurrentByIndex(index) {
     if (!this.head) return null;
     let curr = this.head;
-    let count = 0;
-    while (count < this.length) {
+    for (let count = 0; count < this.length; count++) {
       if (curr.index === index) {
         this.currentNode = curr;
         return curr;
       }
       curr = curr.next;
-      count++;
     }
-    return null;
+    // Fallback: if not found, default to head
+    this.currentNode = this.head;
+    return this.head;
   }
 
   getCurrentNode() {
