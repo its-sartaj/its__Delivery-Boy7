@@ -1,37 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Misho - India's favourite online shopping destination. Shop for fashion, electronics, beauty, home & kitchen products at lowest prices with free delivery.">
-    <meta name="keywords" content="online shopping, fashion, electronics, beauty, home decor, best prices, free delivery, India">
-    <meta name="author" content="Misho">
-    <meta name="theme-color" content="#f43397">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Misho - Shop Online at Best Prices">
-    <meta property="og:description" content="India's favourite online shopping destination. Lowest prices, free delivery, and millions of products.">
-    <meta property="og:type" content="website">
-    
-    <title>Misho - India's Most Loved Online Shopping App</title>
-    
-    <!-- Favicon (emoji-based data URI) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Indian Delivery Boys 🛵 — The Hustle Anthem</title>
+  <meta name="description" content="An immersive web experience celebrating Indian delivery riders. Bollywood hits, city street vibes, bike horns, and chai breaks — the ultimate delivery boy simulator.">
+  <meta name="keywords" content="Indian delivery boys, Bollywood songs, delivery rider, Zomato, Swiggy, music player, Indian streets">
+  <meta name="author" content="Indian Delivery Boys">
+  <meta name="theme-color" content="#ff5722">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Indian Delivery Boys 🛵 — The Hustle Anthem">
+  <meta property="og:description" content="Ride through Indian streets with Bollywood bangers. A tribute to every delivery rider.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Indian Delivery Boys 🛵">
+  <meta name="twitter:description" content="The ultimate delivery boy experience — Bollywood hits, bike horns, and chai breaks.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=VT323&family=Yatra+One&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- Header (rendered by JS) -->
-    <header id="header" class="header"></header>
-    
-    <!-- Main Content (rendered by JS router) -->
-    <main id="main-content"></main>
-    
-    <!-- Footer (rendered by JS) -->
-    <footer id="footer"></footer>
-    
-    <!-- App Script -->
-    <script src="app.js"></script>
+<body class="is-night" id="app-body">
+
+  <!-- ============================================ -->
+  <!-- ANIMATED CITY BACKGROUND                     -->
+  <!-- ============================================ -->
+  <div id="background-scene" class="background-scene">
+    <!-- Sky -->
+    <div id="sky" class="sky">
+      <div class="stars" id="stars"></div>
+      <div class="moon" id="moon"></div>
+    </div>
+
+    <!-- City Skyline -->
+    <div id="city-skyline" class="city-skyline">
+      <div class="building b1"><div class="windows"></div></div>
+      <div class="building b2"><div class="windows"></div></div>
+      <div class="building b3"><div class="windows"></div></div>
+      <div class="building b4"><div class="windows"></div></div>
+      <div class="building b5"><div class="windows"></div></div>
+      <div class="building b6"><div class="windows"></div></div>
+      <div class="building b7"><div class="windows"></div></div>
+      <div class="building b8"><div class="windows"></div></div>
+      <div class="building b9"><div class="windows"></div></div>
+      <div class="building b10"><div class="windows"></div></div>
+    </div>
+
+    <!-- Streetlights -->
+    <div id="streetlights" class="streetlights">
+      <div class="streetlight sl-1"><div class="light-glow"></div></div>
+      <div class="streetlight sl-2"><div class="light-glow"></div></div>
+      <div class="streetlight sl-3"><div class="light-glow"></div></div>
+    </div>
+
+    <!-- Road -->
+    <div id="road" class="road">
+      <div class="road-surface"></div>
+      <div class="road-lines"></div>
+      <div class="road-lines road-lines-2"></div>
+    </div>
+
+    <!-- Passing Vehicles (CSS silhouettes) -->
+    <div class="passing-vehicles">
+      <div class="vehicle auto-rickshaw" id="vehicle-auto"></div>
+      <div class="vehicle car" id="vehicle-car"></div>
+      <div class="vehicle truck" id="vehicle-truck"></div>
+    </div>
+
+    <!-- Rain Overlay -->
+    <div id="rain-overlay" class="rain-overlay">
+      <div class="rain-drop r1"></div>
+      <div class="rain-drop r2"></div>
+      <div class="rain-drop r3"></div>
+      <div class="rain-drop r4"></div>
+      <div class="rain-drop r5"></div>
+      <div class="rain-drop r6"></div>
+      <div class="rain-drop r7"></div>
+      <div class="rain-drop r8"></div>
+      <div class="rain-drop r9"></div>
+      <div class="rain-drop r10"></div>
+      <div class="rain-drop r11"></div>
+      <div class="rain-drop r12"></div>
+      <div class="rain-drop r13"></div>
+      <div class="rain-drop r14"></div>
+      <div class="rain-drop r15"></div>
+      <div class="rain-drop r16"></div>
+      <div class="rain-drop r17"></div>
+      <div class="rain-drop r18"></div>
+      <div class="rain-drop r19"></div>
+      <div class="rain-drop r20"></div>
+    </div>
+  </div>
+
+  <!-- Bike Vibration Wrapper -->
+  <div id="bike-sway" class="bike-sway">
+
+    <!-- ============================================ -->
+    <!-- HERO / LANDING SECTION                      -->
+    <!-- ============================================ -->
+    <header id="hero-section" class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot pulse-green"></span>
+          <span class="badge-text">ONLINE</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="title-emoji">🛵</span>
+          <span class="title-main">Indian Delivery Boys</span>
+        </h1>
+        <p class="hero-tagline font-yatra">
+          "हर ऑर्डर में एक कहानी है"
+        </p>
+        <p class="hero-subtitle">The Hustle Anthem — Ride. Deliver. Vibe.</p>
+        <button id="btn-start-ride" class="btn-start-ride" aria-label="Start your ride">
+          <span class="btn-icon">▶</span>
+          <span class="btn-label">Start Your Ride</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============================================ -->
+    <!-- MAIN APP CONTENT (hidden until start)       -->
+    <!-- ============================================ -->
+    <main id="main-app" class="main-app hidden-section">
+
+      <!-- ============================================ -->
+      <!-- RIDER STATS DASHBOARD                       -->
+      <!-- ============================================ -->
+      <section id="rider-stats" class="rider-stats" aria-label="Rider Statistics">
+        <div class="stat-card" id="stat-card-orders">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value font-vt323" id="stat-orders">0</div>
+          <div class="stat-label">Orders Today</div>
+        </div>
+        <div class="stat-card" id="stat-card-km">
+          <div class="stat-icon">🛣️</div>
+          <div class="stat-value font-vt323" id="stat-km">0.0</div>
+          <div class="stat-label">Km Ridden</div>
+        </div>
+        <div class="stat-card" id="stat-card-earnings">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value font-vt323" id="stat-earnings">₹0</div>
+          <div class="stat-label">Earnings</div>
+        </div>
+        <div class="stat-card" id="stat-card-rating">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value font-vt323" id="stat-rating">4.2</div>
+          <div class="stat-label">Rating</div>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- MUSIC PLAYER                                -->
+      <!-- ============================================ -->
+      <section id="music-player" class="music-player" aria-label="Music Player">
+        <div class="player-container">
+
+          <!-- Spinning Disc / Album Art -->
+          <div class="player-disc-wrapper">
+            <div id="player-disc" class="player-disc">
+              <div class="disc-inner">
+                <div class="disc-label">🎵</div>
+              </div>
+              <div class="disc-grooves"></div>
+            </div>
+          </div>
+
+          <!-- YouTube Player (hidden) -->
+          <div id="youtube-container" class="youtube-container">
+            <div id="youtube-player"></div>
+          </div>
+
+          <!-- Song Info -->
+          <div class="song-info">
+            <h2 id="song-title" class="song-title">Select a Song</h2>
+            <p id="song-artist" class="song-artist">—</p>
+            <p id="song-movie" class="song-movie">—</p>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-wrapper">
+            <span id="current-time" class="time-display font-mono">0:00</span>
+            <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div id="progress-fill" class="progress-fill"></div>
+              <div id="progress-handle" class="progress-handle"></div>
+            </div>
+            <span id="total-time" class="time-display font-mono">0:00</span>
+          </div>
+
+          <!-- Player Controls -->
+          <div class="player-controls">
+            <button id="btn-shuffle" class="ctrl-btn" aria-label="Shuffle" title="Shuffle (S)">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+            </button>
+            <button id="btn-prev" class="ctrl-btn" aria-label="Previous song" title="Previous (P)">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button id="btn-play" class="ctrl-btn ctrl-btn-play" aria-label="Play" title="Play/Pause (Space)">
+              <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" width="32" height="32" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button id="btn-next" class="ctrl-btn" aria-label="Next song" title="Next (N)">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <button id="btn-repeat" class="ctrl-btn" aria-label="Repeat" title="Repeat (R)">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+            </button>
+          </div>
+
+          <!-- Volume Control -->
+          <div class="volume-wrapper">
+            <button id="btn-mute" class="volume-icon-btn" aria-label="Mute">
+              <svg id="icon-volume" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg id="icon-mute" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" class="hidden"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="70" aria-label="Volume">
+          </div>
+
+          <!-- Playlist Toggle -->
+          <button id="btn-playlist-toggle" class="btn-playlist-toggle" aria-label="Toggle Playlist">
+            <span>🎶 Playlist</span>
+            <span id="playlist-count" class="playlist-count">80</span>
+          </button>
+        </div>
+
+        <!-- Playlist Panel -->
+        <div id="playlist-panel" class="playlist-panel hidden">
+          <div class="playlist-header">
+            <h3 class="playlist-title font-baloo">🎧 Rider's Playlist</h3>
+            <div class="playlist-search-wrapper">
+              <input type="text" id="playlist-search" class="playlist-search" placeholder="Search songs..." aria-label="Search songs">
+            </div>
+            <div class="playlist-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="romantic">❤️ Romantic</button>
+              <button class="filter-btn" data-filter="sad">😢 Sad</button>
+              <button class="filter-btn" data-filter="upbeat">🔥 Upbeat</button>
+              <button class="filter-btn" data-filter="rain">🌧️ Rain</button>
+            </div>
+          </div>
+          <ul id="playlist-list" class="playlist-list" role="list">
+            <!-- Songs populated by JS -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- ACTION BUTTONS                              -->
+      <!-- ============================================ -->
+      <section id="action-buttons" class="action-buttons" aria-label="Action Buttons">
+
+        <!-- Horn Button -->
+        <div class="action-card horn-card">
+          <button id="btn-horn" class="action-btn horn-btn" aria-label="Bike Horn">
+            <span class="action-btn-icon">📯</span>
+            <span class="action-btn-label">HORN</span>
+          </button>
+          <div id="horn-text" class="floating-text hidden">SIDE DO BHAI! 🛵</div>
+          <div id="horn-rings" class="horn-rings"></div>
+        </div>
+
+        <!-- Notification Button -->
+        <div class="action-card notification-card">
+          <button id="btn-notification" class="action-btn notification-btn" aria-label="Order Notification">
+            <span class="action-btn-icon">🔔</span>
+            <span class="action-btn-label">ORDER</span>
+          </button>
+          <div id="notification-popup" class="notification-popup hidden">
+            <div class="notif-header">
+              <span class="notif-app-icon">🛵</span>
+              <span class="notif-app-name">DeliveryApp</span>
+              <span class="notif-time">now</span>
+            </div>
+            <div class="notif-body">
+              <strong id="notif-title">ORDER AAYA! 📱</strong>
+              <p id="notif-detail">New order from <span id="notif-restaurant">Restaurant</span></p>
+              <p class="notif-distance"><span id="notif-km">2.3</span> km away • ₹<span id="notif-amount">45</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chai Break Button -->
+        <div class="action-card chai-card">
+          <button id="btn-chai" class="action-btn chai-btn" aria-label="Chai Break">
+            <span class="action-btn-icon">☕</span>
+            <span class="action-btn-label">CHAI</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- DELIVERY RECEIPT GENERATOR                  -->
+      <!-- ============================================ -->
+      <section id="receipt-section" class="receipt-section" aria-label="Delivery Receipt Generator">
+        <h2 class="section-title font-baloo">🧾 Delivery Receipt Generator</h2>
+        <p class="section-subtitle">Generate a realistic delivery order slip!</p>
+
+        <div class="receipt-form">
+          <div class="form-group">
+            <label for="receipt-restaurant" class="form-label">Restaurant / Store</label>
+            <input type="text" id="receipt-restaurant-input" class="form-input" placeholder="e.g., Sharma Ji Ka Dhaba" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label for="receipt-address" class="form-label">Delivery Address</label>
+            <input type="text" id="receipt-address-input" class="form-input" placeholder="e.g., B-42, Lajpat Nagar, Delhi" maxlength="60">
+          </div>
+          <button id="btn-generate-receipt" class="btn-generate" aria-label="Generate Receipt">
+            🧾 Generate Receipt
+          </button>
+        </div>
+
+        <!-- Receipt Output -->
+        <div id="receipt-output" class="receipt-output hidden">
+          <div class="receipt-card" id="receipt-card">
+            <div class="receipt-header-bar">
+              <span class="receipt-logo">🛵</span>
+              <span class="receipt-brand font-baloo">Indian Delivery Boys</span>
+            </div>
+            <div class="receipt-divider dashed"></div>
+            <div class="receipt-order-id font-vt323">
+              Order #<span id="receipt-order-id">000000</span>
+            </div>
+            <div class="receipt-date font-mono" id="receipt-date"></div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-from">
+              <span class="receipt-label">FROM:</span>
+              <span id="receipt-from-name" class="receipt-value"></span>
+            </div>
+            <div class="receipt-to">
+              <span class="receipt-label">TO:</span>
+              <span id="receipt-to-address" class="receipt-value"></span>
+            </div>
+            <div class="receipt-divider dashed"></div>
+            <div class="receipt-items" id="receipt-items">
+              <!-- Generated items -->
+            </div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-total">
+              <span class="receipt-total-label">TOTAL:</span>
+              <span id="receipt-total-amount" class="receipt-total-value font-vt323">₹0</span>
+            </div>
+            <div class="receipt-delivery-fee">
+              <span>Delivery Fee:</span>
+              <span id="receipt-delivery-fee">₹0</span>
+            </div>
+            <div class="receipt-divider dashed"></div>
+            <div class="receipt-rider-info">
+              <span>🛵 Rider: </span>
+              <span id="receipt-rider-name">Raju</span>
+              <div class="receipt-rating" id="receipt-rating">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="receipt-eta">
+              <span>⏱️ Estimated: </span>
+              <span id="receipt-eta">25 min</span>
+            </div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-footer font-mono">
+              Thank you for ordering! 🙏<br>
+              "Har Order Mein Ek Kahani Hai"
+            </div>
+          </div>
+          <button id="btn-download-receipt" class="btn-download" aria-label="Download Receipt">
+            📥 Download Receipt
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SETTINGS PANEL                              -->
+      <!-- ============================================ -->
+      <section id="settings-panel" class="settings-panel" aria-label="Settings">
+        <h2 class="section-title font-baloo">⚙️ Ride Settings</h2>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <span class="setting-label">🌙 Night Mode</span>
+            <label class="toggle-switch" for="toggle-daynight">
+              <input type="checkbox" id="toggle-daynight" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">🌧️ Rain Mode</span>
+            <label class="toggle-switch" for="toggle-rain">
+              <input type="checkbox" id="toggle-rain">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">🛵 Bike Sway</span>
+            <label class="toggle-switch" for="toggle-sway">
+              <input type="checkbox" id="toggle-sway" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">🔊 Engine Sound</span>
+            <label class="toggle-switch" for="toggle-engine">
+              <input type="checkbox" id="toggle-engine">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- KEYBOARD SHORTCUTS INFO                     -->
+      <!-- ============================================ -->
+      <section id="shortcuts-section" class="shortcuts-section" aria-label="Keyboard Shortcuts">
+        <h2 class="section-title font-baloo">⌨️ Shortcuts</h2>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item">
+            <kbd>Space</kbd>
+            <span>Play / Pause</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>N</kbd>
+            <span>Next Song</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>P</kbd>
+            <span>Previous Song</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>H</kbd>
+            <span>Horn 📯</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>O</kbd>
+            <span>Order Notification</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>C</kbd>
+            <span>Chai Break ☕</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>D</kbd>
+            <span>Day/Night Toggle</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>L</kbd>
+            <span>Playlist Toggle</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <p class="footer-text">
+          🛵 <strong>Indian Delivery Boys</strong> — A tribute to every rider who delivers happiness.
+        </p>
+        <p class="footer-credit">Made with ❤️ and ☕ | "Har Order Mein Ek Kahani Hai"</p>
+      </footer>
+
+    </main>
+
+    <!-- ============================================ -->
+    <!-- CHAI BREAK MODAL                            -->
+    <!-- ============================================ -->
+    <div id="chai-break-modal" class="chai-modal hidden" role="dialog" aria-label="Chai Break">
+      <div class="chai-modal-content">
+        <h2 class="chai-title font-yatra">☕ एक कटिंग चाय!</h2>
+        <p class="chai-subtitle">Tapri Chai Break — Music paused</p>
+        <div class="chai-cup-wrapper">
+          <div class="chai-cup">
+            <div class="chai-liquid"></div>
+            <div class="chai-steam s1"></div>
+            <div class="chai-steam s2"></div>
+            <div class="chai-steam s3"></div>
+          </div>
+          <div class="chai-saucer"></div>
+        </div>
+        <div class="chai-timer font-vt323" id="chai-timer">5:00</div>
+        <p class="chai-message" id="chai-message">Chai ho rahi hai... Aaram se baitho! 🍪</p>
+        <button id="btn-skip-chai" class="btn-skip-chai" aria-label="Skip Chai Break">
+          Chal, Order Aaya! 🛵
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /bike-sway -->
+
+  <!-- Scripts -->
+  <script src="songs.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

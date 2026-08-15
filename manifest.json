@@ -1,0 +1,26 @@
+{
+  "name": "Indian Delivery Boys",
+  "short_name": "DeliveryBoys",
+  "description": "The Hustle Anthem — An immersive web experience celebrating Indian delivery riders with Bollywood hits, city vibes, and chai breaks.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#ff5722",
+  "background_color": "#0a0e14",
+  "categories": ["entertainment", "music"],
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
