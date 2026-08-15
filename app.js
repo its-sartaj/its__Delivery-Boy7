@@ -109,12 +109,12 @@ const soundEngine = new SoundEngine();
 // Global callback for YouTube API
 window.onYouTubeIframeAPIReady = function() {
   player = new YT.Player('youtube-player', {
-    height: '200', 
-    width: '200',
+    height: '100%', 
+    width: '100%',
     playerVars: { 
       autoplay: 0, 
-      controls: 0, 
-      disablekb: 1, 
+      controls: 1, 
+      disablekb: 0, 
       fs: 0, 
       modestbranding: 1,
       rel: 0,
