@@ -360,8 +360,11 @@ class SongDoublyLinkedList {
     document.addEventListener('keydown', handleKeyboardShortcuts);
   }
 
+  let pendingAutoPlay = false;
+
   function startRide() {
     enableMobileBackgroundAudio();
+    pendingAutoPlay = true;
     
     const hero = document.getElementById('hero-section');
     const mainApp = document.getElementById('main-app');
@@ -382,10 +385,8 @@ class SongDoublyLinkedList {
       startStatsSimulator();
     } catch(e) {}
 
-    try {
+    if (isPlayerReady && player && typeof player.loadVideoById === 'function') {
       loadSong(currentSongIndex, true);
-    } catch(e) {
-      console.warn('Error playing song on start:', e);
     }
   }
 
@@ -402,8 +403,9 @@ class SongDoublyLinkedList {
   }
 
   window.onPlayerReady = function(event) {
+    isPlayerReady = true;
     if (playlist.length > 0) {
-      loadSong(currentSongIndex, false);
+      loadSong(currentSongIndex, pendingAutoPlay);
     }
     const volSlider = document.getElementById('volume-slider');
     if (volSlider && event.target.setVolume) {
