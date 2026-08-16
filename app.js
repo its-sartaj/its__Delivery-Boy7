@@ -416,12 +416,19 @@ class SongDoublyLinkedList {
 
   let lastSwitchTime = 0;
   let songStartTime = 0;
+  let isSongActive = false; // Set to true ONLY when PLAYING event actually fires
+  let isLoadingTrack = false;
+  let errorTimer = null;
 
   window.onPlayerStateChange = function(event) {
     if (event.data == YT.PlayerState.PLAYING) {
       isPlaying = true;
-      // Only set start time on FIRST PLAYING event for this song
-      // Prevents buffering re-entries from resetting the timer
+      isLoadingTrack = false;
+      isSongActive = true;
+      if (errorTimer) {
+        clearTimeout(errorTimer);
+        errorTimer = null;
+      }
       if (songStartTime === 0) {
         songStartTime = Date.now();
       }
@@ -443,26 +450,35 @@ class SongDoublyLinkedList {
       updatePlayPauseUI();
       stopProgressBar();
       
-      // Always auto-play next song when current song ends
-      if (isRepeating) {
-        songStartTime = 0; // Reset for repeat
-        player.seekTo(0);
-        player.playVideo();
-      } else {
-        playNext();
+      // CRITICAL CASCADE PREVENTION:
+      // Only auto-play the next song if this track was ACTUALLY playing and completed.
+      // If isLoadingTrack is true or isSongActive is false, this is just an unload artifact from previous video!
+      if (isSongActive && !isLoadingTrack) {
+        isSongActive = false;
+        if (isRepeating) {
+          songStartTime = 0;
+          if (player && typeof player.seekTo === 'function') {
+            player.seekTo(0);
+            player.playVideo();
+          }
+        } else {
+          playNext();
+        }
       }
     }
   };
 
-  let errorTimer = null;
-
   window.onPlayerError = function(event) {
     console.warn('YouTube Player Error code:', event.data);
     if (errorTimer) clearTimeout(errorTimer);
+    
+    // If a track encounters an embed error, safely advance to next track after a debounce
     errorTimer = setTimeout(() => {
-      console.log('Skipping unplayable/restricted track to next song...');
-      playNext(true);
-    }, 500);
+      if (!isPlaying) {
+        console.log('Skipping unplayable track to next song...');
+        playNext(true);
+      }
+    }, 1500);
   };
 
   // === PLAYER FUNCTIONS ===
@@ -471,8 +487,14 @@ class SongDoublyLinkedList {
     if (!song) return;
 
     currentSongIndex = index;
-    songStartTime = 0; // Reset song play start timer
-    songList.setCurrentByIndex(index); // Sync Doubly Linked List active pointer
+    songStartTime = 0;
+    isSongActive = false;
+    isLoadingTrack = true;
+    if (errorTimer) {
+      clearTimeout(errorTimer);
+      errorTimer = null;
+    }
+    songList.setCurrentByIndex(index);
 
     // Instant UI Update (0ms latency feedback)
     document.getElementById('song-title').textContent = song.title;
@@ -548,7 +570,7 @@ class SongDoublyLinkedList {
     if (playlist.length === 0) return;
     
     const now = Date.now();
-    if (!isErrorSkip && (now - lastSwitchTime < 600)) {
+    if (!isErrorSkip && (now - lastSwitchTime < 800)) {
       return;
     }
     lastSwitchTime = now;
@@ -569,9 +591,8 @@ class SongDoublyLinkedList {
   function playPrev() {
     if (playlist.length === 0) return;
 
-    // STRICT DEBOUNCE: Block ANY track change within 1000ms
     const now = Date.now();
-    if (now - lastSwitchTime < 1000) {
+    if (now - lastSwitchTime < 800) {
       return;
     }
     lastSwitchTime = now;
