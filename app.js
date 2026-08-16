@@ -420,7 +420,11 @@ class SongDoublyLinkedList {
   window.onPlayerStateChange = function(event) {
     if (event.data == YT.PlayerState.PLAYING) {
       isPlaying = true;
-      songStartTime = Date.now(); // Record when song actually started playing
+      // Only set start time on FIRST PLAYING event for this song
+      // Prevents buffering re-entries from resetting the timer
+      if (songStartTime === 0) {
+        songStartTime = Date.now();
+      }
       updatePlayPauseUI();
       startProgressBar();
       enableMobileBackgroundAudio();
@@ -439,18 +443,13 @@ class SongDoublyLinkedList {
       updatePlayPauseUI();
       stopProgressBar();
       
-      const playedSeconds = songStartTime > 0 ? (Date.now() - songStartTime) / 1000 : 0;
-      
-      // Only auto-play next song if current song genuinely played to the end (> 15 seconds)
-      if (playedSeconds > 15) {
-        if (isRepeating) {
-          player.seekTo(0);
-          player.playVideo();
-        } else {
-          playNext();
-        }
+      // Always auto-play next song when current song ends
+      if (isRepeating) {
+        songStartTime = 0; // Reset for repeat
+        player.seekTo(0);
+        player.playVideo();
       } else {
-        console.log(`Ignored premature ENDED event (${playedSeconds.toFixed(1)}s)`);
+        playNext();
       }
     }
   };
