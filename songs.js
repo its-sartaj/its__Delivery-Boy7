@@ -57,11 +57,11 @@ const SONGS = [
   { id: 48, title: 'Phir Le Aya Dil', artist: 'Arijit Singh', movie: 'Barfi', year: 2012, youtubeId: '7L_2V5Q8BKY' },
   { id: 49, title: 'Tum Hi Ho', artist: 'Arijit Singh', movie: 'Aashiqui 2', year: 2013, youtubeId: 'Umqb9KENgmk' },
   { id: 50, title: 'Kun Faya Kun', artist: 'A.R. Rahman, Javed Ali', movie: 'Rockstar', year: 2011, youtubeId: 'T94IgFMM5QU' },
-  { id: 51, title: 'Tujhe Bhula Diya', artist: 'Mohit Chauhan', movie: 'Anjaana Anjaani', year: 2010, youtubeId: 'u4Y403XlH80' },
+  { id: 51, title: 'Tujhe Bhula Diya', artist: 'Mohit Chauhan', movie: 'Anjaana Anjaani', year: 2010, youtubeId: 'JIjsNkqXsKI' },
   { id: 52, title: 'Kabhi Alvida Naa Kehna', artist: 'Sonu Nigam', movie: 'KANK', year: 2006, youtubeId: 'tK3gW7b6n8A' },
   { id: 53, title: 'Maahi Ve', artist: 'Faakhir', movie: 'Kaante', year: 2002, youtubeId: 'rT2hK29hN_w' },
-  { id: 54, title: 'Kaho Naa Pyaar Hai', artist: 'Udit Narayan', movie: 'KNPH', year: 2000, youtubeId: 'G1wM5A-nZp5' },
-  { id: 55, title: 'Tera Mera Rishta', artist: 'Kumar Sanu, Alka Yagnik', movie: 'Awarapan', year: 2007, youtubeId: 'v8v11fKqRy1' },
+  { id: 54, title: 'Kaho Naa Pyaar Hai', artist: 'Udit Narayan', movie: 'KNPH', year: 2000, youtubeId: 'y3cKEYY09Y4' },
+  { id: 55, title: 'Tera Mera Rishta', artist: 'Kumar Sanu, Alka Yagnik', movie: 'Awarapan', year: 2007, youtubeId: 'jD3cHPGGFrk' },
 
   // Modern Hits (24+ songs)
   { id: 56, title: 'Tum Hi Ho (Reprise)', artist: 'Arijit Singh', movie: 'Aashiqui 2', year: 2013, youtubeId: '8hQd3Z10Xw8' },

@@ -158,7 +158,7 @@ class SongDoublyLinkedList {
   }
 
   // Populate Circular Doubly Linked List from songs array
-  buildFromArray(songs) {
+  buildFromArray(songs, fullPlaylist) {
     this.head = null;
     this.tail = null;
     this.currentNode = null;
@@ -167,7 +167,9 @@ class SongDoublyLinkedList {
     if (!songs || songs.length === 0) return;
 
     for (let i = 0; i < songs.length; i++) {
-      const newNode = new SongNode(songs[i], i);
+      // Use actual playlist index so next/prev always reference the correct song
+      const actualIndex = fullPlaylist ? fullPlaylist.indexOf(songs[i]) : i;
+      const newNode = new SongNode(songs[i], actualIndex);
       if (!this.head) {
         this.head = newNode;
         this.tail = newNode;
@@ -236,7 +238,6 @@ class SongDoublyLinkedList {
   let isMuted = false;
   let statsInterval = null;
   let chaiInterval = null;
-  let progressAnimationFrame = null;
 
   // Background Audio Keep-Alive for Mobile Phone Background Playback
   let bgAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
@@ -283,7 +284,7 @@ class SongDoublyLinkedList {
   // === INIT ===
   function init() {
     playlist = [...SONGS]; // from songs.js (global const)
-    songList.buildFromArray(playlist); // Initialize Doubly Linked List
+    songList.buildFromArray(playlist, playlist); // Initialize Doubly Linked List
     initPlaylistUI();
     attachEventListeners();
     registerPWA();
@@ -770,7 +771,7 @@ class SongDoublyLinkedList {
       song.movie.toLowerCase().includes(term)
     );
     renderPlaylist(filtered);
-    songList.buildFromArray(filtered.length > 0 ? filtered : playlist);
+    songList.buildFromArray(filtered.length > 0 ? filtered : playlist, playlist);
     songList.setCurrentByIndex(currentSongIndex);
     
     // reset categories
@@ -790,13 +791,13 @@ class SongDoublyLinkedList {
     
     if (category === 'all') {
       renderPlaylist(playlist);
-      songList.buildFromArray(playlist);
+      songList.buildFromArray(playlist, playlist);
       songList.setCurrentByIndex(currentSongIndex);
     } else {
       const categoryIds = SONG_CATEGORIES[category] || [];
       const filtered = playlist.filter(song => categoryIds.includes(song.id));
       renderPlaylist(filtered);
-      songList.buildFromArray(filtered.length > 0 ? filtered : playlist);
+      songList.buildFromArray(filtered.length > 0 ? filtered : playlist, playlist);
       songList.setCurrentByIndex(currentSongIndex);
     }
   }
